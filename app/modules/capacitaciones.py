@@ -209,7 +209,7 @@ def dashboard_capacitaciones():
     
     with col1:
         fig_tipo = px.pie(df, names="tipo", title="Capacitaciones por Tipo")
-        st.plotly_chart(fig_tipo, use_container_width=True)
+        st.plotly_chart(fig_tipo, width='stretch')
     
     with col2:
         fig_estado = px.bar(
@@ -218,7 +218,7 @@ def dashboard_capacitaciones():
             title="Capacitaciones por Estado",
             labels={"estado": "Estado", "count": "Cantidad"}
         )
-        st.plotly_chart(fig_estado, use_container_width=True)
+        st.plotly_chart(fig_estado, width='stretch')
 
 
 def modulo_capacitaciones():

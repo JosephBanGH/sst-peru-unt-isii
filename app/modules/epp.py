@@ -47,7 +47,7 @@ def formulario_registro_epp():
         
         descripcion = st.text_area("Descripción")
         
-        submitted = st.form_submit_button("💾 Registrar EPP", use_container_width=True)
+        submitted = st.form_submit_button("💾 Registrar EPP", width='stretch')
         
         if submitted:
             if not all([nombre, tipo, vida_util_meses]):
@@ -121,7 +121,7 @@ def formulario_asignacion_epp():
         
         observaciones = st.text_area("Observaciones")
         
-        submitted = st.form_submit_button("💾 Asignar EPP", use_container_width=True)
+        submitted = st.form_submit_button("💾 Asignar EPP", width='stretch')
         
         if submitted:
             # Verificar stock disponible
@@ -195,7 +195,7 @@ def listar_catalogo_epp():
             "Stock", "Stock Mín", "Estado", "Vida Útil (m)", "Costo (S/)"
         ]
         
-        st.dataframe(df_mostrar, use_container_width=True, hide_index=True)
+        st.dataframe(df_mostrar, width='stretch', hide_index=True)
         
         # Alertas de stock bajo
         stock_bajo = df[df["stock_actual"] <= df["stock_minimo"]]
@@ -245,7 +245,7 @@ def listar_epp_vencimientos():
             "Fecha Venc.", "Días Rest.", "Estado"
         ]
         
-        st.dataframe(df_mostrar, use_container_width=True, hide_index=True)
+        st.dataframe(df_mostrar, width='stretch', hide_index=True)
         
         # Botón para enviar alertas
         if st.button("📧 Enviar Alertas de Vencimiento"):
@@ -299,7 +299,7 @@ def dashboard_epp():
             names="tipo",
             title="Distribución por Tipo de EPP"
         )
-        st.plotly_chart(fig_tipo, use_container_width=True)
+        st.plotly_chart(fig_tipo, width='stretch')
     
     with col2:
         # Stock por tipo
@@ -311,7 +311,7 @@ def dashboard_epp():
             title="Stock por Tipo de EPP",
             labels={"tipo": "Tipo", "stock_actual": "Stock"}
         )
-        st.plotly_chart(fig_stock, use_container_width=True)
+        st.plotly_chart(fig_stock, width='stretch')
 
 
 def modulo_epp():

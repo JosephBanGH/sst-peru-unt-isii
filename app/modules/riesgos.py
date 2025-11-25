@@ -288,7 +288,7 @@ def dashboard_riesgos():
                 "Crítico": "red"
             }
         )
-        st.plotly_chart(fig_clasificacion, use_container_width=True)
+        st.plotly_chart(fig_clasificacion, width='stretch')
     
     with col2:
         # Distribución por tipo de riesgo
@@ -299,7 +299,7 @@ def dashboard_riesgos():
             title="Riesgos por Tipo",
             labels={"tipo_riesgo": "Tipo de Riesgo", "count": "Cantidad"}
         )
-        st.plotly_chart(fig_tipo, use_container_width=True)
+        st.plotly_chart(fig_tipo, width='stretch')
     
     # Mapa de calor por área y clasificación
     pivot_area = pd.crosstab(df["area"], df["clasificacion"])
@@ -309,7 +309,7 @@ def dashboard_riesgos():
         labels=dict(x="Clasificación", y="Área", color="Cantidad"),
         color_continuous_scale="RdYlGn_r"
     )
-    st.plotly_chart(fig_heatmap, use_container_width=True)
+    st.plotly_chart(fig_heatmap, width='stretch')
 
 
 def modulo_riesgos():

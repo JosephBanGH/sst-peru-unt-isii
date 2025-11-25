@@ -318,7 +318,7 @@ def dashboard_incidentes():
             names="tipo",
             title="Distribución por Tipo de Incidente"
         )
-        st.plotly_chart(fig_tipo, use_container_width=True)
+        st.plotly_chart(fig_tipo, width='stretch')
     
     with col2:
         # Incidentes por área
@@ -329,7 +329,7 @@ def dashboard_incidentes():
             title="Incidentes por Área",
             labels={"area": "Área", "count": "Cantidad"}
         )
-        st.plotly_chart(fig_area, use_container_width=True)
+        st.plotly_chart(fig_area, width='stretch')
     
     # Tendencia temporal
     df["fecha"] = pd.to_datetime(df["fecha_hora"]).dt.date
@@ -342,7 +342,7 @@ def dashboard_incidentes():
         title="Tendencia de Incidentes en el Tiempo",
         labels={"fecha": "Fecha", "cantidad": "Cantidad de Incidentes"}
     )
-    st.plotly_chart(fig_tendencia, use_container_width=True)
+    st.plotly_chart(fig_tendencia, width='stretch')
 
 
 def modulo_incidentes():

@@ -171,7 +171,7 @@ def documentos_por_revisar():
         
         df = pd.DataFrame(docs_revision)
         st.dataframe(df[["codigo", "titulo", "tipo", "fecha_revision", "dias_hasta_revision"]], 
-                    use_container_width=True, hide_index=True)
+                    width='stretch', hide_index=True)
         
         if st.button("📧 Enviar Alertas de Revisión"):
             for doc in docs_revision:

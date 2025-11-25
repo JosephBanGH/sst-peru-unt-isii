@@ -141,7 +141,7 @@ def listar_inspecciones():
         st.info(f"Total: {len(inspecciones)}")
         
         df = pd.DataFrame(inspecciones)
-        st.dataframe(df[["codigo", "area", "fecha_programada", "estado"]], use_container_width=True, hide_index=True)
+        st.dataframe(df[["codigo", "area", "fecha_programada", "estado"]], width='stretch', hide_index=True)
     else:
         st.warning("No hay inspecciones registradas")
 

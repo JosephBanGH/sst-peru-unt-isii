@@ -68,7 +68,7 @@ def reporte_ejecutivo():
             title="Tendencia de Incidentes por Mes",
             labels={"x": "Mes", "y": "Cantidad"}
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
 
 def reporte_legal_sunafil():
@@ -289,7 +289,7 @@ def reporte_legal_sunafil():
             data=excel_buffer,
             file_name=f"reporte_sunafil_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True
+            width='stretch'
         )
     
     with col2:
@@ -298,7 +298,7 @@ def reporte_legal_sunafil():
             data=pdf_buffer,
             file_name=f"reporte_sunafil_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
             mime="application/pdf",
-            use_container_width=True
+            width='stretch'
         )
 
 
@@ -327,7 +327,7 @@ def analisis_estadistico():
             with col1:
                 # Distribución por clasificación
                 fig = px.pie(df, names="clasificacion", title="Distribución por Clasificación")
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             with col2:
                 # Riesgos por área
@@ -336,7 +336,7 @@ def analisis_estadistico():
                     x="area", y="count",
                     title="Riesgos por Área"
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             # Mapa de calor
             pivot = pd.crosstab(df["tipo_riesgo"], df["clasificacion"])
@@ -345,7 +345,7 @@ def analisis_estadistico():
                 title="Mapa de Calor: Tipo de Riesgo vs Clasificación",
                 color_continuous_scale="RdYlGn_r"
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
     
     elif tipo_analisis == "Análisis de Incidentes":
         incidentes = supabase.listar_incidentes()
@@ -363,7 +363,7 @@ def analisis_estadistico():
                 y="cantidad",
                 title="Tendencia de Incidentes por Mes"
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
             
             col1, col2 = st.columns(2)
             
@@ -374,7 +374,7 @@ def analisis_estadistico():
                     x="tipo", y="count",
                     title="Incidentes por Tipo"
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             with col2:
                 # Por área
@@ -383,7 +383,7 @@ def analisis_estadistico():
                     x="area", y="count",
                     title="Incidentes por Área"
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
 
 
 def exportar_excel():

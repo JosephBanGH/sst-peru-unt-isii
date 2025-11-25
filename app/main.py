@@ -121,23 +121,23 @@ def mostrar_dashboard_principal():
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if st.button("⚠️ Registrar Riesgo", use_container_width=True):
-            st.session_state.pagina_actual = "Gestión de Riesgos"
+        if st.button("⚠️ Registrar Riesgo", width='stretch'):
+            st.session_state.pagina_actual = "riesgos"
             st.rerun()
     
     with col2:
-        if st.button("🚨 Reportar Incidente", use_container_width=True):
-            st.session_state.pagina_actual = "Incidentes y Accidentes"
+        if st.button("🚨 Reportar Incidente", width='stretch'):
+            st.session_state.pagina_actual = "incidentes"
             st.rerun()
     
     with col3:
-        if st.button("📚 Nueva Capacitación", use_container_width=True):
-            st.session_state.pagina_actual = "Capacitaciones"
+        if st.button("📚 Nueva Capacitación", width='stretch'):
+            st.session_state.pagina_actual = "capacitaciones"
             st.rerun()
     
     with col4:
-        if st.button("🔍 Nueva Inspección", use_container_width=True):
-            st.session_state.pagina_actual = "Inspecciones"
+        if st.button("🔍 Nueva Inspección", width='stretch'):
+            st.session_state.pagina_actual = "inspecciones"
             st.rerun()
     
     st.markdown("---")
@@ -192,7 +192,7 @@ def mostrar_dashboard_principal():
 def menu_navegacion():
     """Menú de navegación lateral"""
     with st.sidebar:
-        st.image("https://via.placeholder.com/200x80/1f77b4/ffffff?text=SST+PERU", use_container_width=True)
+        st.image("https://placehold.co/200x80/1f77b4/ffffff?text=SST+PERU", width='stretch')
         
         st.markdown("---")
         st.markdown("### 📋 Navegación")
@@ -215,7 +215,7 @@ def menu_navegacion():
         
         # Botones de navegación
         for nombre, clave in paginas.items():
-            if st.button(nombre, use_container_width=True, key=f"nav_{clave}"):
+            if st.button(nombre, width='stretch', key=f"nav_{clave}"):
                 st.session_state.pagina_actual = clave
                 st.rerun()
         
