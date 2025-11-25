@@ -112,7 +112,7 @@ def formulario_registro_incidente():
                             )
                             if url:
                                 evidencias_urls.append(url)
-                
+
                 datos_incidente = {
                     "codigo": generar_codigo_incidente(),
                     "tipo": tipo,

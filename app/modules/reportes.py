@@ -30,20 +30,20 @@ def reporte_ejecutivo():
     incidentes = supabase.listar_incidentes()
     capacitaciones = supabase.listar_capacitaciones()
     inspecciones = supabase.listar_inspecciones()
-    
+
     # Métricas principales
     col1, col2, col3, col4 = st.columns(4)
-    
+
     with col1:
         st.metric("Total Riesgos", len(riesgos))
         riesgos_criticos = len([r for r in riesgos if r.get("clasificacion") in ["Alto", "Crítico"]])
         st.metric("Riesgos Críticos", riesgos_criticos)
-    
+
     with col2:
         st.metric("Total Incidentes", len(incidentes))
         accidentes = len([i for i in incidentes if "Accidente" in i.get("tipo", "")])
         st.metric("Accidentes", accidentes)
-    
+
     with col3:
         st.metric("Capacitaciones", len(capacitaciones))
         cap_realizadas = len([c for c in capacitaciones if c.get("estado") == "realizada"])

@@ -61,8 +61,6 @@ class N8NClient:
             bool: True si se envió correctamente
         """
         url = self.webhooks["incidente_registrado"]
-        print(url)
-        st.title(url)
         payload = {
             "evento": "incidente_registrado",
             "incidente_id": incidente.get("id"),
@@ -75,8 +73,6 @@ class N8NClient:
             "requiere_investigacion": incidente.get("requiere_investigacion", False),
             "reportado_por": incidente.get("reportado_por")
         }
-        print(payload)
-        st.title(payload)
         return self._enviar_webhook(url, payload)
     
     def notificar_alerta_epp_vencimiento(self, epp_asignacion: Dict[str, Any]) -> bool:
