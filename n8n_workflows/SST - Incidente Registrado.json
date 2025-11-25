@@ -1,0 +1,194 @@
+{
+  "name": "SST - Incidente Registrado",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "incidente-registrado",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b3734f24-f084-4805-99d1-3c59f9299887",
+      "name": "Webhook Incidente",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        64
+      ],
+      "webhookId": "incidente-registrado"
+    },
+    {
+      "parameters": {
+        "fromEmail": "sst@empresa.com",
+        "toEmail": "supervisor@empresa.com, seguridad@empresa.com",
+        "subject": "🚨 ALERTA: Nuevo Incidente Registrado - {{$json.body.codigo}}",
+        "text": "=Se ha registrado un nuevo incidente en el sistema SST:\n\n📋 Código: {{$json.body.codigo}}\n🔴 Tipo: {{$json.body.tipo}}\n📍 Área: {{$json.body.area}}\n📅 Fecha: {{$json.body.fecha_hora}}\n\n📝 Descripción:\n{{$json.body.descripcion}}\n\n👤 Afectado: {{$json.body.afectado_nombre}}\n\n⚠️ Requiere Investigación: {{$json.body.requiere_investigacion}}\n\n🔗 Accede al sistema para más detalles.\n\n---\nSistema SST Perú - Ley 29783",
+        "options": {}
+      },
+      "id": "10eb841a-fc19-4877-83d5-d3fe4325cdea",
+      "name": "Enviar Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        368,
+        -48
+      ],
+      "webhookId": "bd3b503e-5262-488b-a16c-8c6d5c24eb79",
+      "credentials": {
+        "smtp": {
+          "id": "8LlesD1lEZkjxoS9",
+          "name": "Gmail SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fzizazjvpnwbbtqyiedw.supabase.co/rest/v1/acciones_correctivas",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6aXphemp2cG53YmJ0cXlpZWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyNTU5MjMsImV4cCI6MjA3ODgzMTkyM30.AfaiIoWjH9WpWEbMzs7ikiILwMiJU9NfqsFz0ePVZEE"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6aXphemp2cG53YmJ0cXlpZWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyNTU5MjMsImV4cCI6MjA3ODgzMTkyM30.AfaiIoWjH9WpWEbMzs7ikiILwMiJU9NfqsFz0ePVZEE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"descripcion\": \"Acción correctiva generada automáticamente por el sistema\",\n  \"fecha_compromiso\": \"{{ $now.plus(7, 'days').toFormat('yyyy-MM-dd') }}\"\n}",
+        "options": {}
+      },
+      "id": "952a38d3-fccf-4f36-8d4d-5ad618858a92",
+      "name": "Crear Acción Correctiva",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        576,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Notificaciones enviadas correctamente\", \"timestamp\": $now } }}",
+        "options": {}
+      },
+      "id": "8a308fbc-957d-4b53-bb08-badfaba8a6e3",
+      "name": "Respuesta Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        768,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"🚨 *NUEVO INCIDENTE REGISTRADO*\\n\\n*Código:* {{$json.body.codigo}}\\n*Tipo:* {{$json.body.tipo}}\\n*Área:* {{$json.body.area}}\\n*Fecha:* {{$json.body.fecha_hora}}\\n\\n*Descripción:*\\n{{$json.body.descripcion}}\\n\\n*Afectado:* {{$json.body.afectado_nombre}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        208
+      ],
+      "id": "ec76f0b1-4594-4c90-ae3e-6db6604ff268",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Incidente": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enviar Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Email": {
+      "main": [
+        [
+          {
+            "node": "Crear Acción Correctiva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Acción Correctiva": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Crear Acción Correctiva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab16ae6a-88bd-4bbd-9e54-14b380562d7f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9aee84143fb4c4e738347008f1537ebf47c167d13c78db626f68e4a6d8ac0f76"
+  },
+  "id": "GZwY9uKWkhyo6zxb",
+  "tags": [
+    {
+      "createdAt": "2025-11-18T03:27:20.107Z",
+      "updatedAt": "2025-11-18T03:27:20.107Z",
+      "id": "KUuEgoLRa8hwN1OJ",
+      "name": "SST"
+    },
+    {
+      "createdAt": "2025-11-18T03:27:20.036Z",
+      "updatedAt": "2025-11-18T03:27:20.036Z",
+      "id": "aU83EHdn3lglVecE",
+      "name": "Incidentes"
+    }
+  ]
+}

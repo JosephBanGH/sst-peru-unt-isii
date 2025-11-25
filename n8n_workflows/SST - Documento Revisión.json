@@ -1,0 +1,257 @@
+{
+  "name": "SST - Documento Revisión",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "documento-revision",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a43768d1-4374-4c50-860d-9ff9ba5ade44",
+      "name": "Webhook Documento",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        64
+      ],
+      "webhookId": "documento-revision"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.evento}}",
+              "operation": "equals",
+              "value2": "documento_revision"
+            }
+          ]
+        }
+      },
+      "id": "5baabc90-509c-4068-8b3c-f949fb8eef3c",
+      "name": "Validar Evento",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "sst@empresa.com",
+        "toEmail": "calidad@empresa.com, sst@empresa.com",
+        "subject": "⏰ ALERTA: Documento Requiere Revisión - {{$json.body.codigo}}",
+        "text": "=Se requiere revisión del siguiente documento del Sistema SST:\n\n📄 Código: {{$json.body.codigo}}\n📋 Título: {{$json.body.titulo}}\n📁 Tipo: {{$json.body.tipo}}\n🔢 Versión Actual: {{$json.body.version}}\n📅 Fecha de Revisión: {{$json.body.fecha_revision}}\n⏳ Días Restantes: {{$json.body.dias_hasta_revision}}\n\n👤 Elaborado por: {{$json.body.elaborado_por}}\n\n⚠️ Por favor, proceder con la revisión del documento según lo programado.\n\nRecuerde que la documentación actualizada es un requisito de la Ley 29783.\n\n---\nSistema SST Perú",
+        "options": {}
+      },
+      "id": "b58170ac-0194-4a3a-9f97-ff6caf2223a9",
+      "name": "Email Revisión",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        176,
+        -112
+      ],
+      "webhookId": "b8320c20-43e4-4bf9-ae42-6c639536c4b9",
+      "credentials": {
+        "smtp": {
+          "id": "8LlesD1lEZkjxoS9",
+          "name": "Gmail SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 1 * *"
+            }
+          ]
+        }
+      },
+      "id": "73ae9b49-6507-4889-b2c9-7f53669fa866",
+      "name": "Cron Mensual Día 1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://joellen-prebronze-undespondently.ngrok-free.dev/api/documentos/revision",
+        "options": {}
+      },
+      "id": "da9ed65b-3311-4d90-ad50-d33532f7e019",
+      "name": "Obtener Documentos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -336,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a33f3f87-d41c-499c-82e6-d71296bbbe6f",
+      "name": "Split Documentos",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        32,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Alerta de revisión enviada\", \"timestamp\": $now } }}",
+        "options": {}
+      },
+      "id": "1c55c641-9a85-402e-994e-450a0f94eec9",
+      "name": "Respuesta Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        464,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"📄 *DOCUMENTO POR REVISAR*\\n*Código:* {{$json.body.codigo}}\\n*Título:* {{$json.body.titulo}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        96
+      ],
+      "id": "38d6b9a1-d59f-4361-bf28-bcf49498f382",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Documento": {
+      "main": [
+        [
+          {
+            "node": "Validar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Evento": {
+      "main": [
+        [
+          {
+            "node": "Email Revisión",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Revisión": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron Mensual Día 1": {
+      "main": [
+        [
+          {
+            "node": "Obtener Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener Documentos": {
+      "main": [
+        [
+          {
+            "node": "Split Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Documentos": {
+      "main": [
+        [
+          {
+            "node": "Email Revisión",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "816d7ae4-91a1-47a4-a461-459d23cf85a0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9aee84143fb4c4e738347008f1537ebf47c167d13c78db626f68e4a6d8ac0f76"
+  },
+  "id": "plpmf0Y72kEgVh27",
+  "tags": [
+    {
+      "createdAt": "2025-11-18T03:30:55.700Z",
+      "updatedAt": "2025-11-18T03:30:55.700Z",
+      "id": "CVmL8sLbvXGFWDhP",
+      "name": "Documentos"
+    },
+    {
+      "createdAt": "2025-11-18T03:27:20.107Z",
+      "updatedAt": "2025-11-18T03:27:20.107Z",
+      "id": "KUuEgoLRa8hwN1OJ",
+      "name": "SST"
+    }
+  ]
+}

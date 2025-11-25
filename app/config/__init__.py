@@ -1,0 +1,3 @@
+"""
+Configuración del Sistema SST
+"""

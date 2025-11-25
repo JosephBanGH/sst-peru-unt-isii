@@ -1,0 +1,139 @@
+{
+  "name": "SST - Riesgo Crítico Identificado",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "riesgo-critico",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "7375c145-f391-4756-aa33-01ecaddc90f5",
+      "name": "Webhook Riesgo Crítico",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -352
+      ],
+      "webhookId": "riesgo-critico"
+    },
+    {
+      "parameters": {
+        "fromEmail": "sst@empresa.com",
+        "toEmail": "supervisor@empresa.com, seguridad@empresa.com",
+        "subject": "🔴 ALERTA: Riesgo Crítico Identificado - {{$json.body.codigo}}",
+        "text": "=Se ha identificado un RIESGO CRÍTICO en el sistema SST:\n\n📋 Código: {{$json.body.codigo}}\n🔴 Clasificación: {{$json.body.clasificacion}}\n📊 Nivel de Riesgo: {{$json.body.nivel_riesgo}} (Probabilidad: {{$json.body.probabilidad}} x Severidad: {{$json.body.severidad}})\n\n📍 Área: {{$json.body.area}}\n⚙️ Proceso: {{$json.body.proceso}}\n⚠️ Tipo de Riesgo: {{$json.body.tipo_riesgo}}\n\n📝 Descripción:\n{{$json.body.descripcion}}\n\n🛡️ Medidas de Control:\n{{$json.body.medidas_control}}\n\n👤 Responsable: {{$json.body.responsable}}\n📅 Fecha Identificación: {{$json.body.fecha_identificacion}}\n\n⚠️ ACCIÓN REQUERIDA: Este riesgo requiere atención inmediata y medidas de control efectivas.\n\n🔗 Accede al sistema para más detalles y plan de acción.\n\n---\nSistema SST Perú - Ley 29783",
+        "options": {}
+      },
+      "id": "da0e1793-7b0f-4f31-9c40-e945f5117f36",
+      "name": "Enviar Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -352
+      ],
+      "webhookId": "cc8b1ae4-735e-434d-8c1b-7fddc717d872",
+      "credentials": {
+        "smtp": {
+          "id": "8LlesD1lEZkjxoS9",
+          "name": "Gmail SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"🔴 *RIESGO CRÍTICO IDENTIFICADO*\\n\\n*Código:* {{$json.body.codigo}}\\n*Clasificación:* {{$json.body.clasificacion}}\\n*Nivel:* {{$json.body.nivel_riesgo}} (Prob: {{$json.body.probabilidad}} x Sev: {{$json.body.severidad}})\\n\\n*Área:* {{$json.body.area}}\\n*Proceso:* {{$json.body.proceso}}\\n*Tipo:* {{$json.body.tipo_riesgo}}\\n\\n*Descripción:*\\n{{$json.body.descripcion}}\\n\\n*Medidas de Control:*\\n{{$json.body.medidas_control}}\\n\\n*Responsable:* {{$json.body.responsable}}\\n*Fecha:* {{$json.body.fecha_identificacion}}\\n\\n⚠️ *Requiere acción inmediata*\"\n}",
+        "options": {}
+      },
+      "id": "8c41877d-91a6-4537-b7a0-4e12cb701edd",
+      "name": "Enviar a Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1072,
+        -352
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Notificación de riesgo crítico enviada\", \"timestamp\": $now } }}",
+        "options": {}
+      },
+      "id": "fd7ce6cd-43b0-4375-8aec-a7c0554d1454",
+      "name": "Respuesta Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        -352
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Riesgo Crítico": {
+      "main": [
+        [
+          {
+            "node": "Enviar Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Email": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar a Slack": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0860f48d-cf27-480c-b801-0832a0bb0037",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9aee84143fb4c4e738347008f1537ebf47c167d13c78db626f68e4a6d8ac0f76"
+  },
+  "id": "NKe4Wy9S3f1pnmUY",
+  "tags": [
+    {
+      "createdAt": "2025-11-18T03:27:20.107Z",
+      "updatedAt": "2025-11-18T03:27:20.107Z",
+      "id": "KUuEgoLRa8hwN1OJ",
+      "name": "SST"
+    },
+    {
+      "createdAt": "2025-11-18T05:58:50.421Z",
+      "updatedAt": "2025-11-18T05:58:50.421Z",
+      "id": "YpS9bhZP7YB5lDd0",
+      "name": "Riesgos"
+    }
+  ]
+}

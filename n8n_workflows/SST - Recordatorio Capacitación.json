@@ -1,0 +1,257 @@
+{
+  "name": "SST - Recordatorio Capacitación",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "recordatorio-capacitacion",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "be75f3d8-3487-4d67-a116-1c027b17cbd8",
+      "name": "Webhook Capacitación",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        -48
+      ],
+      "webhookId": "recordatorio-capacitacion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.evento}}",
+              "operation": "equals",
+              "value2": "recordatorio_capacitacion"
+            }
+          ]
+        }
+      },
+      "id": "0cc9ee47-3977-4ac9-a273-0d1da0646825",
+      "name": "Validar Evento",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "body.asistentes",
+        "options": {}
+      },
+      "id": "0f23e622-290f-4341-8904-56e5ef669573",
+      "name": "Split Asistentes",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        480,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "sst@empresa.com",
+        "toEmail": "={{$json.email}}",
+        "subject": "📚 Recordatorio: Capacitación Programada - {{$json.body.titulo}}",
+        "text": "=Estimado/a {{$json.nombre}},\n\nLe recordamos que tiene una capacitación programada:\n\n📚 Título: {{$json.body.titulo}}\n📋 Tipo: {{$json.body.tipo}}\n👨‍🏫 Instructor: {{$json.body.instructor}}\n📅 Fecha: {{$json.body.fecha_programada}}\n⏱️ Duración: {{$json.body.duracion_horas}} horas\n📍 Lugar: {{$json.body.lugar}}\n💻 Modalidad: {{$json.body.modalidad}}\n\nLa capacitación es obligatoria según la Ley 29783 de Seguridad y Salud en el Trabajo.\n\nPor favor, confirme su asistencia.\n\n---\nSistema SST Perú",
+        "options": {}
+      },
+      "id": "6c29e989-a441-4574-9ccb-293ca117005b",
+      "name": "Email Participante",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        736,
+        160
+      ],
+      "webhookId": "6fa591ba-c677-4587-b1eb-61df65127bc9",
+      "credentials": {
+        "smtp": {
+          "id": "8LlesD1lEZkjxoS9",
+          "name": "Gmail SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "7ba64510-fa03-49ad-bf7d-4f6f250bf706",
+      "name": "Cron Semanal Lunes 9AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://joellen-prebronze-undespondently.ngrok-free.dev/api/capacitaciones/proximas",
+        "options": {}
+      },
+      "id": "49de474d-25de-423d-8b80-9e1f755d14f5",
+      "name": "Obtener Capacitaciones",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        80,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Recordatorios enviados\", \"timestamp\": $now } }}",
+        "options": {}
+      },
+      "id": "0fe62887-e9f8-4b5a-aea0-82242cc8db35",
+      "name": "Respuesta Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"📚 *CAPACITACIÓN PROGRAMADA*\\n*Título:* {{$json.body.titulo}}\\n*Fecha:* {{$json.body.fecha_programada}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        -160
+      ],
+      "id": "cf41887c-8ea6-46c9-8408-2a5ad88701cf",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Capacitación": {
+      "main": [
+        [
+          {
+            "node": "Validar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Evento": {
+      "main": [
+        [
+          {
+            "node": "Split Asistentes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Asistentes": {
+      "main": [
+        [
+          {
+            "node": "Email Participante",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Participante": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron Semanal Lunes 9AM": {
+      "main": [
+        [
+          {
+            "node": "Obtener Capacitaciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener Capacitaciones": {
+      "main": [
+        [
+          {
+            "node": "Split Asistentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "04afe0cf-42f5-40ad-a494-65e0560a3cdc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9aee84143fb4c4e738347008f1537ebf47c167d13c78db626f68e4a6d8ac0f76"
+  },
+  "id": "uGHGGkTN1EwIm0dD",
+  "tags": [
+    {
+      "createdAt": "2025-11-18T03:30:12.775Z",
+      "updatedAt": "2025-11-18T03:30:12.775Z",
+      "id": "0OvmklfvQaSLI6kl",
+      "name": "Capacitaciones"
+    },
+    {
+      "createdAt": "2025-11-18T03:27:20.107Z",
+      "updatedAt": "2025-11-18T03:27:20.107Z",
+      "id": "KUuEgoLRa8hwN1OJ",
+      "name": "SST"
+    }
+  ]
+}

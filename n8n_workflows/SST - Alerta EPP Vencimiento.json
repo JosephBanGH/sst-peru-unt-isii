@@ -1,0 +1,257 @@
+{
+  "name": "SST - Alerta EPP Vencimiento",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alerta-epp-vencimiento",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "082e269f-42da-47e9-82e0-009c1e417cc1",
+      "name": "Webhook EPP",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        64
+      ],
+      "webhookId": "alerta-epp-vencimiento"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.evento}}",
+              "operation": "equals",
+              "value2": "alerta_epp_vencimiento"
+            }
+          ]
+        }
+      },
+      "id": "298c18a3-0f5d-4a02-81c7-bd5869b12be2",
+      "name": "Validar Evento",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "sst@empresa.com",
+        "toEmail": "={{$json.body.email}}",
+        "subject": "⏰ ALERTA: EPP Próximo a Vencer - {{$json.body.epp_nombre}}",
+        "text": "=Estimado/a {{$json.body.usuario}},\n\nLe informamos que su EPP está próximo a vencer:\n\n🦺 EPP: {{$json.body.epp_nombre}}\n📦 Tipo: {{$json.body.epp_tipo}}\n📅 Fecha de Vencimiento: {{$json.body.fecha_vencimiento}}\n⏳ Días Restantes: {{$json.body.dias_restantes}}\n🏢 Área: {{$json.body.area}}\n\n⚠️ Por favor, acérquese al almacén para el reemplazo de su EPP antes de la fecha de vencimiento.\n\nRecuerde que el uso de EPP en buen estado es obligatorio según la Ley 29783.\n\n---\nSistema SST Perú",
+        "options": {}
+      },
+      "id": "e1014d2f-25cb-4160-9612-7c0ffb02f64f",
+      "name": "Email al Trabajador",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -48
+      ],
+      "webhookId": "db8637e5-9ccf-4f4e-89f3-98dad0060c60",
+      "credentials": {
+        "smtp": {
+          "id": "8LlesD1lEZkjxoS9",
+          "name": "Gmail SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "103438bb-fdc0-4b44-8474-0d72512d44bf",
+      "name": "Cron Diario 8AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://joellen-prebronze-undespondently.ngrok-free.dev/api/epp/vencimientos",
+        "options": {}
+      },
+      "id": "4d566453-a27c-46ca-b1ad-d74d05c5f518",
+      "name": "Obtener Vencimientos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -368,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "14d3313c-5d31-4ff4-9c35-e0c3baf3c8e6",
+      "name": "Split Registros",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        16,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Alerta enviada\", \"timestamp\": $now } }}",
+        "options": {}
+      },
+      "id": "720236da-1619-4d82-a3aa-739a7b122925",
+      "name": "Respuesta Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        48,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"⏰ *EPP POR VENCER*\\n*Trabajador:* {{$json.body.usuario}}\\n*EPP:* {{$json.body.epp_nombre}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        112
+      ],
+      "id": "ef0456d1-dfeb-4e65-9d26-4910d5036f09",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook EPP": {
+      "main": [
+        [
+          {
+            "node": "Validar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Evento": {
+      "main": [
+        [
+          {
+            "node": "Email al Trabajador",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email al Trabajador": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron Diario 8AM": {
+      "main": [
+        [
+          {
+            "node": "Obtener Vencimientos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener Vencimientos": {
+      "main": [
+        [
+          {
+            "node": "Split Registros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Registros": {
+      "main": [
+        [
+          {
+            "node": "Email al Trabajador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respuesta Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2f00b2f7-186e-49b5-9fbf-7908ccb52c2a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9aee84143fb4c4e738347008f1537ebf47c167d13c78db626f68e4a6d8ac0f76"
+  },
+  "id": "xOgF1TxrrppYXOMX",
+  "tags": [
+    {
+      "createdAt": "2025-11-18T03:29:38.167Z",
+      "updatedAt": "2025-11-18T03:29:38.167Z",
+      "id": "Ca0lfMm0lViLAd6j",
+      "name": "EPP"
+    },
+    {
+      "createdAt": "2025-11-18T03:27:20.107Z",
+      "updatedAt": "2025-11-18T03:27:20.107Z",
+      "id": "KUuEgoLRa8hwN1OJ",
+      "name": "SST"
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+/* Estilos personalizados para el Sistema SST Perú */
+
+/* Colores principales */
+:root {
+    --primary-color: #1f77b4;
+    --secondary-color: #ff7f0e;
+    --success-color: #2ca02c;
+    --warning-color: #ffbb00;
+    --danger-color: #d62728;
+    --info-color: #17a2b8;
+    --light-bg: #f8f9fa;
+    --dark-text: #333333;
+}
+
+/* Header principal */
+.main-header {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    padding: 1rem 0;
+    margin-bottom: 0.5rem;
+}
+
+.sub-header {
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Cards de métricas */
+.metric-card {
+    background-color: var(--light-bg);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--primary-color);
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-card-success {
+    border-left-color: var(--success-color);
+}
+
+.metric-card-warning {
+    border-left-color: var(--warning-color);
+}
+
+.metric-card-danger {
+    border-left-color: var(--danger-color);
+}
+
+/* Botones */
+.stButton>button {
+    width: 100%;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.stButton>button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Sidebar */
+.sidebar .sidebar-content {
+    background-color: var(--light-bg);
+}
+
+/* Tablas */
+.dataframe {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Formularios */
+.stTextInput>div>div>input,
+.stTextArea>div>div>textarea,
+.stSelectbox>div>div>select {
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+/* Alertas */
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+
+/* Expanders */
+.streamlit-expanderHeader {
+    background-color: var(--light-bg);
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+/* Gráficos */
+.plotly-graph-div {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.badge-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.badge-warning {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.badge-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.badge-info {
+    background-color: var(--info-color);
+    color: white;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-header {
+        font-size: 1.8rem;
+    }
+    
+    .sub-header {
+        font-size: 1rem;
+    }
+}
