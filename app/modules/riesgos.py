@@ -231,7 +231,7 @@ def listar_riesgos():
         
         # Exportar a Excel
         if st.button("📥 Exportar a Excel"):
-            excel_file = f"riesgos_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+            excel_file = f"reports/riesgos_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
             df_mostrar.to_excel(excel_file, index=False)
             st.success(f"Archivo exportado: {excel_file}")
     else:
