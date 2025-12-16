@@ -45,7 +45,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://fzizazjvpnwbbtqyiedw.supabase.co/rest/v1/acciones_correctivas",
+        "url": "xxxxxxxxxxxxxx",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
