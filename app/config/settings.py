@@ -9,17 +9,17 @@ import streamlit as st
 load_dotenv()
 
 # Configuración de Supabase
-SUPABASE_URL = st.secrets("SUPABASE_URL")
-SUPABASE_KEY = st.secrets("SUPABASE_KEY")
-SUPABASE_SERVICE_KEY = st.secrets("SUPABASE_SERVICE_KEY")
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+SUPABASE_SERVICE_KEY = st.secrets["SUPABASE_SERVICE_KEY"]
 
 # Configuración de n8n
-N8N_WEBHOOK_URL = st.secrets("N8N_WEBHOOK_URL", "")
+N8N_WEBHOOK_URL = st.secrets["N8N_WEBHOOK_URL", ""]
 
 # Configuración de la aplicación
-APP_NAME = st.secrets("APP_NAME", "Sistema SST Perú")
-APP_VERSION = st.secrets("APP_VERSION", "1.0.0")
-ENVIRONMENT = st.secrets("ENVIRONMENT", "development")
+APP_NAME = st.secrets["APP_NAME", "Sistema SST Perú"]
+APP_VERSION = st.secrets["APP_VERSION", "1.0.0"]
+ENVIRONMENT = st.secrets["ENVIRONMENT", "development"]
 
 # Configuración de Streamlit
 PAGE_TITLE = "Sistema Integral SST - Ley 29783"
