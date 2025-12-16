@@ -69,7 +69,7 @@ Sistema completo de gestión de SST alineado a la **Ley 29783** y su reglamento 
 ### Paso 1: Clonar o Descargar el Proyecto
 
 ```bash
-cd "C:\Users\Jonathan Rojas\Sistema Integral de Seguridad y Salud en el Trabajo\sst-peru"
+cd " tu ruta"
 ```
 
 ### Paso 2: Crear Entorno Virtual
@@ -101,8 +101,7 @@ SUPABASE_KEY=tu_anon_key
 SUPABASE_SERVICE_KEY=tu_service_key
 
 # n8n (con ngrok)
-N8N_WEBHOOK_URL=https://joellen-prebronze-undespondently.ngrok-free.dev/webhook
-
+N8N_WEBHOOK_URL= xxxxxxx
 # Aplicación
 APP_NAME=Sistema SST Perú
 APP_VERSION=1.0.0
@@ -139,7 +138,7 @@ Usar directamente [n8n.cloud](https://n8n.cloud)
 ngrok http 5678
 ```
 
-Copiar la URL generada (ej: `https://joellen-prebronze-undespondently.ngrok-free.dev`) y actualizar el `.env`
+Copiar la URL generada (ej: ``) y actualizar el `.env`
 
 #### Importar Workflows
 

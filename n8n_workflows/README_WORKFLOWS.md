@@ -8,7 +8,7 @@ Este directorio contiene 4 workflows de n8n que automatizan procesos críticos d
 
 Todos los webhooks usan la URL base configurada en `.env`:
 ```
-https://joellen-prebronze-undespondently.ngrok-free.dev/webhook
+xxxxxxxxxxxxxxx
 ```
 
 ### Endpoints Disponibles
@@ -233,7 +233,7 @@ https://joellen-prebronze-undespondently.ngrok-free.dev/webhook
 ### Método 3: Test con cURL
 
 ```bash
-curl -X POST https://joellen-prebronze-undespondently.ngrok-free.dev/webhook/incidente-registrado \
+curl -X POST  \
   -H "Content-Type: application/json" \
   -d '{
     "evento": "incidente_registrado",
