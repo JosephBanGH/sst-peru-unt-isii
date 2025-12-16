@@ -179,6 +179,7 @@ def mostrar_formulario_login():
     """Muestra el formulario de login"""
     st.title("🛡️ Sistema SST Perú")
     st.subheader("Iniciar Sesión")
+    st.info("Sistema con fines de prueba académica. Solo ingresar datos simulados")
     
     with st.form("login_form"):
         email = st.text_input("Email", placeholder="usuario@empresa.com")

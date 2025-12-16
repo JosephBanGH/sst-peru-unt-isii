@@ -79,6 +79,7 @@ def mostrar_dashboard_principal():
     st.markdown('<div class="main-header">🛡️ Sistema Integral SST</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Sistema de Gestión de Seguridad y Salud en el Trabajo - Ley 29783</div>', 
                 unsafe_allow_html=True)
+    st.info("Sistema con fines de prueba académica. Solo ingresar datos simulados")
     
     usuario = obtener_usuario_actual()
     
